@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1025011422074",
+    "project_id": "dweeter-4e7ad",
+    "storage_bucket": "dweeter-4e7ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025011422074:android:7e7337b0b45b49d91cfcc3",
+        "android_client_info": {
+          "package_name": "com.example.dweeter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025011422074-seg2gcfs8rkmnbrjml31b0a29go92mgi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6pJSbfRG_3n_CIJNgZH7GsF_tUES7QjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025011422074-seg2gcfs8rkmnbrjml31b0a29go92mgi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

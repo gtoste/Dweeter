@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Dweeter</string>
+    <string name="your_comment">Your comment...</string>
+    <string name="comment_here">Comment here...</string>
+</resources>

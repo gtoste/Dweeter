@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateTweet"
+    android:padding="20dp"
+    android:gravity="center"
+    >
+
+    <EditText
+        android:id="@+id/tweetMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="1"
+        android:maxLines="8"
+        android:inputType="textMultiLine"
+        android:background="@color/gray"
+        />
+    <Button
+        android:id="@+id/button_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="SEND"
+        />
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="CANCEL"/>
+
+</LinearLayout>
