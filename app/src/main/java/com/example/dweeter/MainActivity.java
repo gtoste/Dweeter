@@ -18,8 +18,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -51,14 +53,24 @@ public class MainActivity extends AppCompatActivity {
 
         this.addMessage.setOnClickListener(this::newTweet);
         loadTweets();
+    }
 
-
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadTweets();
     }
 
     private void newTweet(View view) {
-        Intent intent = new Intent(this, CreateTweet.class);
-        startActivity(intent);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null)
+        {
+            Intent intent = new Intent(this, CreateTweet.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "You must login first!", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void loadTweets(){
@@ -74,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 Collections.reverse(tweets);
                 DashboardAdapter dashboardAdapter = new DashboardAdapter(mContext, tweets);
                 dashboard.setAdapter(dashboardAdapter);
+                dashboard.invalidateViews();
             }
 
             @Override
@@ -95,16 +108,15 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.search)
         {
             RelativeLayout main = findViewById(R.id.main);
-
+            Button button = new Button(this);
+            button.setText("Cancel...");
+            button.setOnClickListener((v)->{
+                loadTweets();
+                main.removeView(button);
+                searchMode = false;
+            });
             if(!searchMode)
             {
-                Button button = new Button(this);
-                button.setText("Cancel...");
-                button.setOnClickListener((v)->{
-                    loadTweets();
-                    main.removeView(button);
-                    searchMode = false;
-                });
                 main.addView(button);
             }
 
@@ -118,27 +130,31 @@ public class MainActivity extends AppCompatActivity {
                 String inputText = input.getText().toString().trim().toLowerCase(Locale.ROOT);
                 if (!inputText.equals(""))
                 {
-                    Pattern p = Pattern.compile(".*"+inputText+".*");
+                    Pattern p = Pattern.compile("^.*"+inputText+".*$");
                     ArrayList<TweetModel> searchTweets = new ArrayList<>();
                     for (TweetModel tweet: tweets) {
-                        Matcher m = p.matcher(tweet.message);
+                        Matcher m = p.matcher(tweet.message.toLowerCase(Locale.ROOT));
                         if(m.matches()) searchTweets.add(tweet);
                     }
                     Collections.reverse(searchTweets);
                     DashboardAdapter dashboardAdapter = new DashboardAdapter(this, searchTweets);
                     dashboard.setAdapter(dashboardAdapter);
+                    dashboard.invalidateViews();
                 }else{
                     input.setError("Type something...");
                 }
             });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.setNegativeButton("Cancel", (dialog, which) -> {
+                dialog.cancel();
+                main.removeView(button);
+                searchMode = false;
+            });
 
             builder.show();
         }else if(item.getItemId() == R.id.account)
         {
             Intent intent = new Intent(this, AccountActivity.class);
             startActivity(intent);
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }

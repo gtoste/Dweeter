@@ -21,8 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class CommentSectionActivity extends AppCompatActivity {
 
@@ -55,6 +57,7 @@ public class CommentSectionActivity extends AppCompatActivity {
         TextView tweetMessage = findViewById(R.id.message);
 
         EditText comment = findViewById(R.id.your_comment);
+        TextView dateofc = findViewById(R.id.date_of_creation);
         Button sendComment = findViewById(R.id.send_comment);
         sendComment.setClickable(false);
         ListView otherComments = findViewById(R.id.other_comments);
@@ -67,6 +70,7 @@ public class CommentSectionActivity extends AppCompatActivity {
                     .resize(48, 48).into(accountIcon);
             accountNick.setText(tweet.accountNick);
             tweetMessage.setText(tweet.message);
+            dateofc.setText(tweet.dateOfCreation);
         }
 
         Context mContext = this;
@@ -103,7 +107,14 @@ public class CommentSectionActivity extends AppCompatActivity {
         sendComment.setOnClickListener(view -> {
             String commentMessage = comment.getText().toString().trim();
             if(!commentMessage.equals("")){
-                Comment c = new Comment(finalPerson.name, finalPerson.url, commentMessage);
+
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    simpleDateFormat = new SimpleDateFormat(" HH:mm:ss dd/MM/YYYY");
+                }
+                String dateString = simpleDateFormat.format(date);
+                Comment c = new Comment(finalPerson.name, finalPerson.url, commentMessage, dateString);
                 comments.add(c);
                 db.child("comments").child(tweet.path).setValue(comments);
                 comment.setText("");

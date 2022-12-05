@@ -49,9 +49,11 @@ public class CommentAdapter extends BaseAdapter {
         TextView nick = view.findViewById(R.id.account_nick);
         ImageView image = view.findViewById(R.id.account_icon);
         TextView message = view.findViewById(R.id.message);
+        TextView dateOfCreation = view.findViewById(R.id.date_of_creation);
 
         Comment comment = comments.get(i);
 
+        dateOfCreation.setText(comment.dateOfCreation);
         nick.setText(comment.accountName);
         Picasso.get()
                 .load(comment.accountUrl)

@@ -8,6 +8,13 @@
     android:padding="15dp"
     >
 
+    <TextView
+        android:id="@+id/date_of_creation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textEnd"
+        android:textSize="11dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

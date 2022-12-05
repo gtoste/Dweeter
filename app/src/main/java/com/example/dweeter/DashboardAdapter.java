@@ -2,6 +2,9 @@ package com.example.dweeter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -83,11 +87,10 @@ public class DashboardAdapter extends BaseAdapter {
             ImageView image = view.findViewById(R.id.account_icon);
             TextView message = view.findViewById(R.id.message);
             TextView likesCount = view.findViewById(R.id.likes_count);
+            TextView dateOfCreation = view.findViewById(R.id.tweet_date);
 
             String like_counts = String.valueOf(tweet.likesCount);
             likesCount.setText(like_counts);
-
-            //TODO IMAGE
 
             ImageButton like = view.findViewById(R.id.like);
             ImageButton comment = view.findViewById(R.id.comment);
@@ -178,6 +181,7 @@ public class DashboardAdapter extends BaseAdapter {
             });
 
 
+            dateOfCreation.setText(tweet.dateOfCreation);
             nick.setText(tweet.accountNick);
             message.setText(tweet.message);
             Picasso.get()
@@ -193,9 +197,17 @@ public class DashboardAdapter extends BaseAdapter {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         TweetModel tw = snapshot.getValue(TweetModel.class);
                         LinearLayout replyTweet = finalView.findViewById(R.id.reply_tweet);
+                        Resources res = context.getResources();
+                        Drawable drawable = ResourcesCompat.getDrawable(res, R.drawable.frame, null);
+
+                        replyTweet.setBackground(drawable);
+                        int dimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics());
+
+                        replyTweet.setPadding(dimension,dimension,dimension,dimension);
                         int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, context.getResources().getDisplayMetrics());
                         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(dimensionInDp,dimensionInDp);
                         ImageView replyIcon = new ImageView(context);
+                        parms.setMargins(0,0,dimension,0);
                         replyIcon.setLayoutParams(parms);
                         Picasso.get()
                                 .load(tw.accountUrl)
@@ -208,7 +220,15 @@ public class DashboardAdapter extends BaseAdapter {
                         replyContainer.setLayoutParams(replyCointainerParams);
                         replyContainer.setOrientation(LinearLayout.VERTICAL);
 
+
+                        TextView replyDate = new TextView(context);
+                        replyDate.setLayoutParams(replyCointainerParams);
+                        replyDate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                        replyDate.setText(tw.dateOfCreation);
+                        replyDate.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                        replyContainer.addView(replyDate);
                         TextView replyNick = new TextView(context);
+
                         replyNick.setLayoutParams(replyCointainerParams);
                         replyNick.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                         replyNick.setText(tw.accountNick);
